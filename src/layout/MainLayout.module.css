@@ -1,0 +1,84 @@
+.navbar {
+  background: linear-gradient(180deg, #0f1b2d 0%, #0b1524 100%);
+  border-right: none;
+}
+
+.brand {
+  height: 72px;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.brandLogo {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--mantine-color-primary-5), var(--mantine-color-primary-7));
+  box-shadow: 0 6px 16px rgba(26, 115, 232, 0.35);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.navSection + .navSection {
+  margin-top: 18px;
+}
+
+.navSectionTitle {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+  padding: 0 14px 8px;
+}
+
+.navLink {
+  border-radius: 8px;
+  padding: 9px 14px;
+  margin-bottom: 2px;
+  color: #cbd5e1;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.navLink:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: white;
+}
+
+.navLink[data-active],
+.navLink[data-active]:hover {
+  background-color: var(--mantine-color-primary-6);
+  color: white;
+  box-shadow: 0 6px 16px rgba(26, 115, 232, 0.3);
+}
+
+.navLabel {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.navFooter {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.header {
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--mantine-color-gray-2);
+}
+
+.search {
+  width: 100%;
+  max-width: 520px;
+}
+
+.main {
+  background-color: var(--page-background);
+  min-height: 100vh;
+}
