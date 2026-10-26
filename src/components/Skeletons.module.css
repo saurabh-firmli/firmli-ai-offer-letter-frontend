@@ -1,0 +1,5 @@
+/* One placeholder row, with the same divider lines as a table / list row. */
+.row {
+  padding: 14px 16px;
+  border-top: 1px solid var(--firmli-border-light);
+}

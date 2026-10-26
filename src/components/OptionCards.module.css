@@ -1,0 +1,43 @@
+.card {
+  padding: 10px 12px;
+  border: 1px solid var(--firmli-border);
+  border-radius: var(--mantine-radius-md);
+  background-color: var(--firmli-page-bg);
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+
+.card:hover {
+  background-color: var(--firmli-surface-muted);
+}
+
+.card[data-checked] {
+  border-color: var(--mantine-color-primary-6);
+  background-color: var(--mantine-color-primary-0);
+  box-shadow: inset 0 0 0 1px var(--mantine-color-primary-6);
+}
+
+.label {
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+}
+
+.card[data-checked] .label,
+.card[data-checked] .icon {
+  color: var(--mantine-color-primary-7);
+}
+
+.icon {
+  display: flex;
+  color: var(--mantine-color-dimmed);
+}
+
+.card:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.card:disabled:hover {
+  background-color: var(--firmli-page-bg);
+}

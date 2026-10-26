@@ -1,0 +1,29 @@
+/* The brand strip at the top of the profile card. */
+.banner {
+  height: 96px;
+  background:
+    radial-gradient(circle at 85% -20%, var(--mantine-color-primary-4) 0, transparent 45%),
+    linear-gradient(120deg, var(--mantine-color-primary-7), var(--mantine-color-primary-5));
+}
+
+/* The avatar sits half on the strip, with a ring in the card's colour. */
+.avatar {
+  margin-top: -44px;
+  border: 4px solid var(--mantine-color-body);
+  box-shadow: var(--mantine-shadow-sm);
+  flex-shrink: 0;
+}
+
+/* A small fact under the name: Institution, Role, Last Login, Member Since. */
+.fact {
+  padding: 12px 14px;
+  border: 1px solid var(--firmli-border-lighter);
+  border-radius: var(--mantine-radius-md);
+  background-color: var(--firmli-surface-muted);
+  min-width: 0;
+}
+
+.section + .section {
+  padding-top: var(--mantine-spacing-lg);
+  border-top: 1px solid var(--firmli-border-lighter);
+}

@@ -1,0 +1,103 @@
+/* A bar chart over time: y-axis labels on the left, the plot with gridlines, dates underneath. */
+.chart {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 180px auto;
+  column-gap: var(--mantine-spacing-xs);
+  padding-top: 20px; /* room for the peak label above the tallest bar */
+}
+
+.yAxis {
+  position: relative;
+  min-width: 24px;
+}
+
+.yAxis span {
+  position: absolute;
+  right: 0;
+  transform: translateY(50%);
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-dimmed);
+  white-space: nowrap;
+}
+
+.plot {
+  position: relative;
+}
+
+/* Recessive gridlines; the bottom one is the baseline. */
+.grid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed var(--firmli-border-lighter);
+}
+
+.grid[data-baseline] {
+  border-top: 1px solid var(--firmli-border-light);
+}
+
+.bars,
+.xAxis {
+  display: flex;
+  gap: 2px;
+}
+
+.bars {
+  position: absolute;
+  inset: 0;
+  align-items: flex-end;
+}
+
+/* One bucket: the hover target is the full height, not just the bar. */
+.slot {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  cursor: default;
+}
+
+.bar {
+  width: 100%;
+  max-width: 40px;
+  border-radius: 4px 4px 0 0;
+  background-color: var(--mantine-color-primary-6);
+  transition: background-color 120ms ease;
+}
+
+.slot:hover .bar {
+  background-color: var(--mantine-color-primary-8);
+}
+
+.slot:hover {
+  background-color: var(--firmli-surface-muted);
+  border-radius: 4px 4px 0 0;
+}
+
+/* The busiest bucket's value, just above its bar. */
+.peak {
+  margin-bottom: 4px;
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.xAxis {
+  margin-top: 6px;
+}
+
+.xCell {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.xCell span {
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-dimmed);
+  white-space: nowrap;
+}

@@ -3,7 +3,7 @@
   overflow: hidden;
   background:
     radial-gradient(circle at 50% 0%, var(--mantine-color-primary-0) 0%, transparent 60%),
-    white;
+    var(--firmli-page-bg);
 }
 
 /* Faint dot grid behind the content */
@@ -11,7 +11,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(var(--mantine-color-gray-3) 1px, transparent 1px);
+  background-image: radial-gradient(var(--firmli-border-light) 1px, transparent 1px);
   background-size: 22px 22px;
   mask-image: radial-gradient(ellipse at 50% 30%, black 0%, transparent 70%);
   pointer-events: none;
@@ -28,9 +28,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--mantine-color-white);
   background: linear-gradient(135deg, var(--mantine-color-primary-5), var(--mantine-color-primary-7));
   box-shadow:
     0 0 0 10px var(--mantine-color-primary-0),
-    0 16px 32px rgba(26, 115, 232, 0.3);
+    0 16px 32px color-mix(in srgb, var(--mantine-color-primary-6) 30%, transparent);
 }

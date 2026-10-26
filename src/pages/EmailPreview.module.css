@@ -1,0 +1,27 @@
+/* The subject and who the email goes to, above the body, as a mail app shows them. */
+.headers {
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--firmli-border-lighter);
+}
+
+.subject {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.recipientRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.recipient {
+  padding: 0 4px;
+  border-radius: 4px;
+  background-color: var(--mantine-color-primary-0);
+  color: var(--mantine-color-primary-7);
+  font-weight: 500;
+}

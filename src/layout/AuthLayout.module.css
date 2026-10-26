@@ -1,0 +1,90 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  background-color: var(--firmli-page-bg);
+}
+
+@media (min-width: 62em) {
+  .page {
+    grid-template-columns: minmax(420px, 5fr) 7fr;
+  }
+}
+
+/* Brand panel, desktop only */
+.brand {
+  position: relative;
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px;
+  color: var(--mantine-color-white);
+  background-color: var(--firmli-header-bg);
+}
+
+@media (min-width: 62em) {
+  .brand {
+    display: flex;
+  }
+}
+
+/* Soft brand-blue glows behind the content */
+.brand::before,
+.brand::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.brand::before {
+  width: 360px;
+  height: 360px;
+  top: -120px;
+  right: -120px;
+  background: color-mix(in srgb, var(--mantine-color-primary-6) 45%, transparent);
+}
+
+.brand::after {
+  width: 280px;
+  height: 280px;
+  bottom: -100px;
+  left: -80px;
+  background: color-mix(in srgb, var(--mantine-color-primary-4) 25%, transparent);
+}
+
+.brand > * {
+  position: relative;
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--mantine-color-white);
+  background: linear-gradient(135deg, var(--mantine-color-primary-5), var(--mantine-color-primary-7));
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--mantine-color-primary-6) 35%, transparent);
+}
+
+.feature {
+  color: color-mix(in srgb, var(--mantine-color-white) 85%, transparent);
+}
+
+.formSide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  background-color: var(--firmli-page-bg);
+}
+
+.formCard {
+  width: 100%;
+  max-width: 420px;
+}

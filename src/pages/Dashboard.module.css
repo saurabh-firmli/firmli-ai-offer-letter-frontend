@@ -8,3 +8,86 @@
   transform: translateY(-2px);
   box-shadow: var(--mantine-shadow-md);
 }
+
+/* The decisions bar: one segment per outcome, 2px gaps, rounded ends. */
+.bar {
+  display: flex;
+  gap: 2px;
+  height: 14px;
+}
+
+.segment {
+  height: 100%;
+  min-width: 6px;
+  border-radius: 4px;
+  transition: opacity 120ms ease;
+}
+
+.bar:hover .segment:not(:hover) {
+  opacity: 0.45;
+}
+
+/* A row of the "Needs attention" list */
+.attentionRow {
+  display: block;
+  padding: 12px var(--mantine-spacing-lg);
+  border-top: 1px solid var(--firmli-border-lighter);
+  transition: background-color 120ms ease;
+}
+
+.attentionRow:hover {
+  background-color: var(--firmli-surface-muted);
+}
+
+.divider {
+  border-top: 1px solid var(--firmli-border-lighter);
+}
+
+/* Pipeline steps, separated by chevrons; scrolls sideways on narrow screens. */
+.pipeline {
+  overflow-x: auto;
+}
+
+.step {
+  flex: 1;
+  min-width: 72px;
+  padding: 10px 12px;
+  border-radius: var(--mantine-radius-md);
+  background-color: var(--firmli-surface-muted);
+}
+
+/* A row of a list widget (recent applications, review queue): edge to edge, a line between rows. */
+.listRow {
+  display: block;
+  padding: 12px var(--mantine-spacing-lg);
+  border-top: 1px solid var(--firmli-border-lighter);
+  transition: background-color 120ms ease;
+}
+
+.listRow:hover {
+  background-color: var(--firmli-surface-muted);
+}
+
+/* Applications by program: a light track with the bar inside, rounded ends. */
+.programRow {
+  cursor: default;
+}
+
+.programTrack {
+  height: 10px;
+  border-radius: 4px;
+  background-color: var(--firmli-surface-muted);
+  overflow: hidden;
+}
+
+.programFill {
+  height: 100%;
+  min-width: 4px;
+  border-radius: 4px;
+  background-color: var(--mantine-color-primary-6);
+  transition: background-color 120ms ease;
+}
+
+.programRow:hover .programFill {
+  background-color: var(--mantine-color-primary-7);
+}

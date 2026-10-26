@@ -1,21 +1,24 @@
+/* White at low opacity, for lines and hovers on the dark navy sidebar. */
 .navbar {
-  background: linear-gradient(180deg, #0f1b2d 0%, #0b1524 100%);
+  --sidebar-line: color-mix(in srgb, var(--mantine-color-white) 8%, transparent);
+
+  background-color: var(--firmli-header-bg);
   border-right: none;
 }
 
 .brand {
-  height: 72px;
-  padding: 0 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  height: 56px; /* HEADER_HEIGHT in MainLayout.tsx, so their bottom lines meet */
+  padding: 0 16px;
+  border-bottom: 1px solid var(--sidebar-line);
 }
 
 .brandLogo {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
   background: linear-gradient(135deg, var(--mantine-color-primary-5), var(--mantine-color-primary-7));
-  box-shadow: 0 6px 16px rgba(26, 115, 232, 0.35);
-  color: white;
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--mantine-color-primary-6) 35%, transparent);
+  color: var(--mantine-color-white);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,7 +26,7 @@
 }
 
 .navSection + .navSection {
-  margin-top: 18px;
+  margin-top: 14px;
 }
 
 .navSectionTitle {
@@ -31,54 +34,116 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #64748b;
-  padding: 0 14px 8px;
+  color: var(--mantine-color-gray-6);
+  padding: 0 12px 6px;
 }
 
 .navLink {
   border-radius: 8px;
-  padding: 9px 14px;
+  padding: 8px 12px;
   margin-bottom: 2px;
-  color: #cbd5e1;
+  color: var(--mantine-color-gray-4);
   transition:
     background-color 120ms ease,
     color 120ms ease;
 }
 
 .navLink:hover {
-  background-color: rgba(255, 255, 255, 0.06);
-  color: white;
+  background-color: var(--sidebar-line);
+  color: var(--mantine-color-white);
 }
 
 .navLink[data-active],
 .navLink[data-active]:hover {
   background-color: var(--mantine-color-primary-6);
-  color: white;
-  box-shadow: 0 6px 16px rgba(26, 115, 232, 0.3);
+  color: var(--mantine-color-white);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--mantine-color-primary-6) 30%, transparent);
 }
 
 .navLabel {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
 }
 
+/* Collapsed sidebar (data-rail): icons only, centered; a thin line instead of each section title. */
+.navbar[data-rail] .brand {
+  justify-content: center;
+  padding: 0;
+}
+
+/* Each icon is a fixed square in the middle of the rail; the (empty) label part takes no room. */
+.navbar[data-rail] .navLink {
+  width: 44px;
+  height: 40px;
+  margin: 0 auto 4px;
+  padding: 0;
+  justify-content: center;
+}
+
+.navbar[data-rail] .navIcon {
+  margin: 0;
+}
+
+.navbar[data-rail] .navBody {
+  display: none;
+}
+
+.railDivider {
+  height: 1px;
+  margin: 0 8px 8px;
+  background-color: var(--sidebar-line);
+}
+
+.navSection:first-child .railDivider {
+  display: none;
+}
+
+/* Modules not built yet: a little dimmer, with a "Soon" tag. */
+.navLink[data-soon]:not([data-active]) {
+  color: var(--mantine-color-gray-6);
+}
+
+.soonTag {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: var(--mantine-color-gray-5);
+  background-color: var(--sidebar-line);
+}
+
+.navLink[data-active] .soonTag {
+  color: var(--mantine-color-white);
+  background-color: color-mix(in srgb, var(--mantine-color-white) 20%, transparent);
+}
+
 .navFooter {
-  padding: 16px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 12px 16px;
+  border-top: 1px solid var(--sidebar-line);
 }
 
 .header {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: color-mix(in srgb, var(--firmli-page-bg) 90%, transparent);
   backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--mantine-color-gray-2);
+  border-bottom: 1px solid var(--firmli-divider);
 }
 
-.search {
-  width: 100%;
-  max-width: 520px;
+/* The account menu button: shows it can be clicked, and stays highlighted while open. */
+.userButton {
+  padding: 4px 10px 4px 4px;
+  border-radius: 999px;
+  transition: background-color 120ms ease;
+}
+
+.userButton:hover,
+.userButton[data-expanded] {
+  background-color: var(--firmli-surface-muted);
 }
 
 .main {
-  background-color: var(--page-background);
+  background-color: var(--firmli-page-bg);
   min-height: 100vh;
 }

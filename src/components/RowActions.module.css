@@ -1,0 +1,9 @@
+/* Row icons stay grey so a table full of rows stays calm; each takes its colour on hover. */
+.action {
+  color: var(--mantine-color-gray-6);
+}
+
+.action:hover:not([data-disabled]) {
+  color: var(--action-color);
+  background-color: var(--action-bg);
+}

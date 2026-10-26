@@ -1,0 +1,66 @@
+/* A set on the list page: the whole card opens the set; lifts on hover like the dashboard cards. */
+.setCard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    border-color 150ms ease;
+}
+
+.setCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--mantine-shadow-md);
+  border-color: var(--mantine-color-primary-3);
+}
+
+.setCardFooter {
+  margin-top: auto;
+  padding-top: var(--mantine-spacing-sm);
+  border-top: 1px solid var(--firmli-border-lighter);
+}
+
+/* The version banner: what the shown version is and what can be done with it. */
+.banner {
+  border-left-width: 4px;
+}
+
+.banner[data-status="draft"] {
+  border-left-color: var(--mantine-color-primary-6);
+  background-color: var(--firmli-surface-selected);
+}
+
+.banner[data-status="published"] {
+  border-left-color: var(--mantine-color-green-6);
+}
+
+.banner[data-status="archived"] {
+  border-left-color: var(--mantine-color-gray-5);
+  background-color: var(--firmli-surface-muted);
+}
+
+/* A category heading over its rules: small caps with a line running to the right. */
+.category {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+}
+
+.category::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--firmli-border-lighter);
+}
+
+/* A rule card: the body lines up under the name, past the number. */
+.ruleBody {
+  padding-left: 40px;
+}
+
+@media (max-width: 36em) {
+  .ruleBody {
+    padding-left: 0;
+  }
+}

@@ -1,0 +1,5 @@
+.section + .section {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--firmli-divider);
+}

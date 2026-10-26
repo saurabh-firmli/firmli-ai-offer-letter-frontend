@@ -1,0 +1,62 @@
+.page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 88px 16px 48px;
+  background-color: var(--firmli-page-bg);
+}
+
+.brand {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--mantine-radius-md);
+  color: var(--mantine-color-white);
+  background-color: var(--mantine-color-primary-6);
+}
+
+.content {
+  width: 100%;
+  max-width: 560px;
+}
+
+.art {
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.art svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.details {
+  width: 100%;
+  max-height: 160px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Inside the app: the same screen in a card, the drawing a little smaller. */
+.inline {
+  display: flex;
+  align-items: center;
+  padding-block: 40px;
+}
+
+.inline .art svg {
+  width: 220px;
+}

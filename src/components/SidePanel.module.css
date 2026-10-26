@@ -1,0 +1,38 @@
+/* An item in the left list; the open one is marked like a selected row. */
+.item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  border-top: 1px solid var(--firmli-border-light);
+  border-left: 3px solid transparent;
+  transition: background-color 120ms ease;
+}
+
+.item:hover {
+  background-color: var(--firmli-surface-muted);
+}
+
+.item[data-active] {
+  background-color: var(--firmli-surface-selected);
+  border-left-color: var(--mantine-color-primary-6);
+}
+
+/*
+ * Desktop: the panel stays in view below the header while the detail on the right scrolls with
+ * the page, and a long list scrolls inside the panel. On small screens it is a normal block.
+ */
+@media (min-width: 62em) {
+  .panel {
+    position: sticky;
+    top: calc(56px + var(--mantine-spacing-md)); /* below the 56px app header */
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 56px - 2 * var(--mantine-spacing-md));
+  }
+
+  .list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+}

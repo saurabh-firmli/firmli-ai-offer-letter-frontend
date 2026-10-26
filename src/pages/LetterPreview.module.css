@@ -1,0 +1,26 @@
+/* The parts of a letter; the page itself comes from components/TemplatePreview. */
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 16px 0;
+  font-size: 13px;
+  color: var(--mantine-color-dimmed);
+}
+
+.subject {
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.signature {
+  margin-top: 32px;
+}
+
+.footer {
+  margin-top: 32px;
+  padding-top: 12px;
+  border-top: 1px solid var(--firmli-border-light);
+  font-size: 12px;
+  color: var(--mantine-color-dimmed);
+}
