@@ -16,6 +16,7 @@ import {
   IAiUsageSummary,
   TAiCallStatus,
   TAiOperation,
+  AI_OPERATION_FILTERS,
   aiOperationLabels,
   formatTokens,
   formatUsd,
@@ -30,9 +31,6 @@ import { BarList, Empty, IKpiCardProps, KpiCard, WidgetCard } from "./DashboardW
 import TrendChart, { trendRange, trendUnit } from "../components/TrendChart";
 
 const PAGE_SIZE = 20;
-
-const toOptions = (labels: Record<string, string>) =>
-  Object.entries(labels).map(([value, label]) => ({ value, label }));
 
 const plural = (count: number, word: string) => `${count.toLocaleString()} ${word}${count === 1 ? "" : "s"}`;
 
@@ -138,7 +136,7 @@ export default function AiUsage() {
         <PeriodFilter onChange={withPageReset(setPeriod)} />
         <Select
           placeholder="All operations"
-          data={toOptions(aiOperationLabels)}
+          data={AI_OPERATION_FILTERS.map((value) => ({ value, label: aiOperationLabels[value] }))}
           value={operation}
           onChange={(value) => withPageReset(setOperation)(value as TAiOperation | null)}
           clearable

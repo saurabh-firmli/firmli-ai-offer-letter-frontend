@@ -26,7 +26,7 @@ export interface IReport {
     documentCompletionRate: number | null;
     avgProcessingSeconds: number | null; // of an AI run
     manualDecisions: number; // outcomes set by a person
-    emailsSent: number | null; // null until emails are built
+    emailsSent: number; // emails to these students that went out, every type
   };
   charts: {
     overTime: {

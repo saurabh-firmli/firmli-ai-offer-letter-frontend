@@ -221,13 +221,13 @@ export default function EmailTemplateForm({ opened, template, onClose }: IEmailT
                 <TextInput
                   label="Cc"
                   placeholder="e.g. admissions@university.edu"
-                  description="Separate addresses with commas, up to 20"
+                  description="Separate addresses with commas or semicolons, up to 20"
                   {...form.getInputProps("cc")}
                 />
                 <TextInput
                   label="Bcc"
                   placeholder="e.g. registrar@university.edu"
-                  description="Separate addresses with commas, up to 20"
+                  description="Separate addresses with commas or semicolons, up to 20"
                   {...form.getInputProps("bcc")}
                 />
               </SimpleGrid>

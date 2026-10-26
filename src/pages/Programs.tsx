@@ -76,8 +76,8 @@ export default function Programs() {
       title: "Delete program",
       message: (
         <>
-          Delete <b>{program.name}</b> ({program.code}) permanently? To hide it but keep it, set its status to
-          Archived instead.
+          Delete <b>{program.name}</b> ({program.code})? It goes from the app and its code can be used again.
+          To hide it but keep it, set its status to Archived instead.
         </>
       ),
       confirmLabel: "Delete",

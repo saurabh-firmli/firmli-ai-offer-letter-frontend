@@ -8,7 +8,7 @@ import { IApiResponse, IPage } from "../types";
 export type TAiOperation =
   "extraction" | "extraction_fallback" | "document_verification" | "assessment" | "assessment_escalation";
 
-// The API sends a label with each call and group; these fill the Operation filter.
+// The API sends a label with each call and group; these name the operations.
 export const aiOperationLabels: Record<TAiOperation, string> = {
   extraction: "Document extraction",
   extraction_fallback: "Extraction fallback",
@@ -16,6 +16,14 @@ export const aiOperationLabels: Record<TAiOperation, string> = {
   assessment: "Eligibility assessment",
   assessment_escalation: "Assessment escalation",
 };
+
+// The Operation filter: what the backend logs today (document_verification is not used yet).
+export const AI_OPERATION_FILTERS: TAiOperation[] = [
+  "extraction",
+  "extraction_fallback",
+  "assessment",
+  "assessment_escalation",
+];
 
 export type TAiCallStatus = "success" | "failed";
 

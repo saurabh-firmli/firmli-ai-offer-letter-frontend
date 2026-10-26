@@ -57,6 +57,7 @@ export interface ITemplateVariable {
  */
 export const BLOCK_VARIABLES = new Set([
   "eligibility_table",
+  "document_checklist",
   "conditions",
   "unmet_requirements",
   "missing_documents",

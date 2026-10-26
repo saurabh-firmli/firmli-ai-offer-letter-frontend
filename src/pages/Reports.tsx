@@ -81,8 +81,8 @@ function QualityCard({ report }: { report: IReport }) {
     { label: "Decided by People", value: String(k.manualDecisions), hint: "Review decisions and changes" },
     {
       label: "Emails Sent",
-      value: k.emailsSent === null ? "—" : String(k.emailsSent),
-      hint: k.emailsSent === null ? "Not tracked yet" : "To students",
+      value: String(k.emailsSent),
+      hint: "To students, every type",
     },
   ];
   return (

@@ -341,7 +341,8 @@ export default function Dashboard() {
         }
       />
 
-      {/* The period and program apply to every count and chart except Received Today. */}
+      {/* The period and program apply to every count and chart except Received Today; Recent Applications,
+          Items Requiring Attention and Recent Activity follow only the program. */}
       <Group gap="sm">
         <PeriodFilter onChange={setPeriod} />
         <SearchableSelect
