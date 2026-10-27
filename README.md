@@ -116,14 +116,17 @@ if a pattern is needed a second time, add it to src/components and list it here.
                     to the API with toApiDate (lib/utils.ts). In forms, applyFormError (lib/forms.ts) puts a 409
                     under its field, 422 messages under theirs and the rest in a toast.
                     Queries retry only on 429.
-        Auth:       login stores the token (lib/session.ts, localStorage "token", lasts 7 days);
-                    lib/api.ts sends it as `Authorization: Bearer <token>`. Any 401 (except a wrong
-                    password on the login form) logs out and opens /login?reason=expired, or
-                    ?reason=inactive&status=<status> when the user is no longer active (blocked,
-                    banned, ...; set on the Users page / user form).
+        Auth:       login answers an access token (lib/session.ts, localStorage "token", 15 minutes) and
+                    sets the session cookie (httpOnly "firmli_refresh", 30 days from its last use).
+                    lib/api.ts sends the token as `Authorization: Bearer <token>`, every request with
+                    credentials (the backend's CORS_ORIGINS must list this app's exact address). A 401
+                    SESSION_ENDED gets a new token once (POST /auth/refresh, one at a time for all failed
+                    requests) and sends the request again; when that fails, or on any other 401 (except a
+                    wrong password on the login form), it logs out and opens /login?reason=expired, or
+                    ?reason=inactive when the user is no longer active (blocked, banned, ...).
                     MainLayout sends logged out users to /login?next=<page> and loads the user
-                    with GET /auth/me. Logout = logOut() (lib/auth.ts): POST /auth/logout ends the user's
-                    tokens on every device, then signOut("logout"). Passwords: Change Password on My Profile
+                    with GET /auth/me. Logout = logOut() (lib/auth.ts): POST /auth/logout ends this device's
+                    session, then signOut("logout"); logOutEverywhere() (My Profile) = POST /auth/logout-all. Passwords: Change Password on My Profile
                     (/profile, pages/Profile.tsx: account, Edit Name via PATCH /auth/me, the role's access, password,
                     log out everywhere; stores the new token),
                     Forgot password on the login page (/forgot-password) and the emailed link
@@ -236,18 +239,20 @@ if a pattern is needed a second time, add it to src/components and list it here.
                     for a page the role can't open (NotAllowed) and a record that is missing / forbidden / failed
                     (RecordUnavailable, with the way back to its list). Drawings in components/Illustrations.
                     Firmli staff (a Super Admin of the platform tenant: isFirmliSuperAdmin): "Switch tenant / user" in the header menu
-                    (components/StaffSwitcher.tsx, /dev/users + /dev/switch-user, active users only). The
-                    staff token is kept in sessionStorage ("staffToken") and sent on those two calls; while
-                    switched, the header shows Back to Firmli, Logout uses the staff token (the client's
-                    sessions stay), and My Profile hides Edit Name / Change Password / Log Out of All Devices.
+                    (components/StaffSwitcher.tsx, /dev/users + /dev/switch-user, active users only). A switch
+                    gives the browser (its cookie, every tab) that user's session; the API does not say so,
+                    so the staff member's name is kept in localStorage ("switchedFrom"). While switched, the
+                    header shows Back to Firmli (POST /auth/switch-back: the staff member's own session
+                    again), switching again and Platform Admin wait until then, and My Profile hides
+                    Edit Name / Change Password / Log Out of All Devices.
                     Platform Admin (/platform, pages/Platform.tsx, lib/platform.ts; "Platform Admin" in the user
                     menu): client tenants with New Tenant (+ first Super Admin), Edit, Block / Unblock, Remove
-                    (type the name), and a tenant drawer with its users and Add User. Calls use the staff token.
-                    Send by Email uses POST /platform/tenants/:id/users/:userId/send-credentials (staff token).
+                    (type the name), and a tenant drawer with its users and Add User.
+                    Send by Email uses POST /platform/tenants/:id/users/:userId/send-credentials.
                     A blocked tenant's users land on login with "Your institution's account is blocked".
         Error codes: lib/api.ts decides a 401 by the error's `code` (lib/errors.ts getErrorCode), never
                     its text: TENANT_BLOCKED, ACCOUNT_NOT_ACTIVE (the API's message is kept in
-                    sessionStorage for the login page, not the URL), anything else = session ended.
+                    sessionStorage for the login page, not the URL), SESSION_ENDED = refresh once, then log in.
         Dropdowns:  lib/dropdowns.ts useDropdown(name, params): GET /dropdowns/<name> ({value, label}, no
                     page limit, no module permission). Program filters, New Application, Assign Programs,
                     the program form's campus / set / template selects (drafts marked) and Send Email use

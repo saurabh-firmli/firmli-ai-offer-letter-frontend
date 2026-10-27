@@ -1,14 +1,16 @@
-// Firmli staff only (a user of the platform tenant): see the app as any client's user, without their
-// password, e.g. to help a client. Every switch is in that client's audit log. The staff token is kept
-// for this tab (lib/session.ts) for the switch calls and Back to Firmli.
+// Firmli staff only (a Super Admin of the platform tenant): see the app as any client's user, without
+// their password, e.g. to help a client. Every switch is in that client's audit log. A switch gives this
+// browser (its cookie, every tab) that user's session; Back to Firmli asks the API for the staff
+// member's own session again (POST /auth/switch-back).
 import { Stack } from "@mantine/core";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { isAxiosError } from "axios";
 import api from "../lib/api";
 import { IUser, userStatusLabels } from "../lib/auth";
 import errorHandler from "../lib/errors";
 import { roleLabelFromCode } from "../lib/roles";
-import { clearSessionData, getStaffToken, getToken, setStaffToken, setToken } from "../lib/session";
+import { clearSessionData, getSwitchedFrom, setSwitchedFrom, setToken } from "../lib/session";
 import { IApiResponse } from "../types";
 import { RO_DASHBOARD } from "../routes";
 import ErrorState from "./ErrorState";
@@ -22,15 +24,15 @@ interface IStaffTenant {
   users: Pick<IUser, "id" | "name" | "email" | "role" | "status">[];
 }
 
-/** True while Firmli staff are switched into a client's user (Back to Firmli is offered). */
-export const isStaffSwitched = () => Boolean(getStaffToken());
+/** True while Firmli staff are switched into another user (Back to Firmli is offered). */
+export const isStaffSwitched = () => Boolean(getSwitchedFrom());
 
-/** Who may switch: a platform user, or staff already switched into a client. */
 /** A Super Admin of Firmli's own tenant: the only one the API lets switch users or use the Platform panel. */
 export const isFirmliSuperAdmin = (user: IUser | undefined) =>
   Boolean(user?.tenant?.isPlatform) && user?.role === "super_admin";
 
-export const canSwitch = (user: IUser | undefined) => isFirmliSuperAdmin(user) || isStaffSwitched();
+/** Switch tenant / user and the Platform panel. While switched, Back to Firmli comes first. */
+export const canSwitch = (user: IUser | undefined) => isFirmliSuperAdmin(user) && !isStaffSwitched();
 
 // A full page load, so nothing of the previous user or tenant stays in memory.
 const openAs = (token: string) => {
@@ -39,21 +41,27 @@ const openAs = (token: string) => {
   window.location.replace(RO_DASHBOARD);
 };
 
-/** Back to Firmli: the staff token again, and the switch ends. */
-export function backToFirmli() {
-  const staffToken = getStaffToken();
-  if (!staffToken) return;
-  setStaffToken(null);
-  openAs(staffToken);
+/** Back to Firmli: the switched session ends and the staff member's own one starts again. */
+export async function backToFirmli() {
+  try {
+    const { data } = await api.post<IApiResponse<{ user: IUser; token: string }>>("/auth/switch-back");
+    setSwitchedFrom(null);
+    openAs(data.data.token);
+  } catch (error) {
+    // 409: this session was not switched into (the mark was stale), so there is nothing to go back to.
+    if (isAxiosError(error) && error.response?.status === 409) setSwitchedFrom(null);
+    errorHandler(error, "Could not go back to Firmli");
+  }
 }
 
 interface IStaffSwitcherProps {
   opened: boolean;
   onClose: () => void;
   currentUserId?: number;
+  staffName?: string; // the logged in staff member, remembered for Back to Firmli
 }
 
-export default function StaffSwitcher({ opened, onClose, currentUserId }: IStaffSwitcherProps) {
+export default function StaffSwitcher({ opened, onClose, currentUserId, staffName }: IStaffSwitcherProps) {
   const tenants = useQuery({
     queryKey: ["staff-users"],
     queryFn: async () => (await api.get<IApiResponse<IStaffTenant[]>>("/dev/users")).data.data,
@@ -65,12 +73,9 @@ export default function StaffSwitcher({ opened, onClose, currentUserId }: IStaff
     mutationFn: async (userId: number) =>
       (await api.post<IApiResponse<{ user: IUser; token: string }>>("/dev/switch-user", { userId })).data
         .data,
-    onSuccess: ({ user, token }) => {
-      // Keep the staff token before the first switch; back in Firmli's own tenant, the switch ends.
-      // Back as a Firmli Super Admin: no staff token needed. Any other user (another Firmli role too)
-      // keeps the staff token, so Back to Firmli still works.
-      if (isFirmliSuperAdmin(user)) setStaffToken(null);
-      else if (!getStaffToken()) setStaffToken(getToken());
+    onSuccess: ({ token }) => {
+      // The API does not say a session was switched into: remember who did it, for Back to Firmli.
+      setSwitchedFrom(staffName ?? "Firmli");
       openAs(token);
     },
     // 409: the user isn't active (a new user must log in once first).

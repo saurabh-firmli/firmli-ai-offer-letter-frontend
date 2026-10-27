@@ -44,7 +44,7 @@ import { isStaffSwitched } from "../components/StaffSwitcher";
 import PageHeader from "../components/PageHeader";
 import {
   getInitials,
-  logOut,
+  logOutEverywhere,
   useChangePassword,
   useMe,
   useUpdateMyName,
@@ -275,7 +275,7 @@ export default function Profile() {
       title: "Log out of all devices",
       message: "You are logged out everywhere, this browser too, and need to log in again.",
       confirmLabel: "Log Out Everywhere",
-      onConfirm: () => void logOut(),
+      onConfirm: () => void logOutEverywhere(),
     });
 
   return (

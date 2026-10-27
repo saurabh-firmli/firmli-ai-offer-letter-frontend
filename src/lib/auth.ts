@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import api from "./api";
 import { live } from "./live";
 import { queryClient } from "./queryClient";
-import { clearSessionData, getToken, setStaffToken, setToken, signOut } from "./session";
+import { clearSessionData, getToken, setSwitchedFrom, setToken, signOut } from "./session";
 import type { IRoleModule } from "./roles";
 import { IApiResponse } from "../types";
 import { RO_DASHBOARD } from "../routes";
@@ -119,8 +119,8 @@ export function useLogin() {
 /** A new login (login, reset password): nothing from a previous session may show for this user. */
 function startSession({ user, token }: { user: IUser; token: string }) {
   clearSessionData();
-  setStaffToken(null); // a fresh login is never a staff switch (lib/session.ts keeps its token per tab)
-  setToken(token);
+  setSwitchedFrom(null); // a fresh login is never a staff switch
+  setToken(token); // the session cookie came with the answer
   queryClient.setQueryData(["me"], user);
   // The login answer has no `modules` (only GET /auth/me does): fetch it once in the background.
   void queryClient.invalidateQueries({ queryKey: ["me"] });
@@ -133,9 +133,9 @@ const keepModules = (user: IUser) => (old: IUser | undefined) => ({
 });
 
 /**
- * Logout ends every token of the user (all their devices), then drops this one. A token that
- * already stopped working is fine: the user is logged out either way. Firmli staff switched into a
- * client's user log out with their own token, so the client's sessions stay as they are.
+ * Logout of this device: its session ends and the cookie is cleared; other devices stay logged in.
+ * Works with an expired token too (the cookie tells which session), so a failure only means the user
+ * was logged out already.
  */
 export async function logOut() {
   live.stop(); // before the token goes, so the stream asks for no new ticket
@@ -145,6 +145,17 @@ export async function logOut() {
     // Already logged out on the server.
   }
   signOut("logout");
+}
+
+/** Log out everywhere (e.g. after a lost phone): every session of the user ends, this one too. */
+export async function logOutEverywhere() {
+  live.stop();
+  try {
+    await api.post("/auth/logout-all");
+  } catch {
+    // The token stopped working: this device is logged out below; the others end on their next refresh.
+  }
+  signOut("logout_all");
 }
 
 export const PASSWORD_MIN = 8;

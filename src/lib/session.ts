@@ -2,14 +2,11 @@ import { queryClient } from "./queryClient";
 import { RO_LOGIN } from "../routes";
 
 const TOKEN_KEY = "token";
-// The client user's token while Firmli staff are switched into it: this tab only, so the staff's
-// other tabs (and any new one) keep their own login instead of becoming the client's user.
-const SWITCHED_TOKEN_KEY = "switchedToken";
 
 // localStorage can throw (private mode, blocked storage), so the token is also kept in memory.
 const readStoredToken = () => {
   try {
-    return sessionStorage.getItem(SWITCHED_TOKEN_KEY) ?? localStorage.getItem(TOKEN_KEY);
+    return localStorage.getItem(TOKEN_KEY);
   } catch {
     return null;
   }
@@ -17,17 +14,16 @@ const readStoredToken = () => {
 
 let token: string | null = readStoredToken();
 
-/** The login token, sent by lib/api.ts as `Authorization: Bearer <token>`. Lasts 7 days. */
-export const getToken = () => token;
+/**
+ * The access token, sent by lib/api.ts as `Authorization: Bearer <token>`. It lasts 15 minutes; the
+ * session cookie (httpOnly, 30 days) gets a new one (lib/api.ts refreshes on a 401). Read from storage
+ * each time, so a token another tab just refreshed is used here too.
+ */
+export const getToken = () => readStoredToken() ?? token;
 
 export function setToken(value: string | null) {
   token = value;
   try {
-    if (value && getStaffToken()) {
-      sessionStorage.setItem(SWITCHED_TOKEN_KEY, value);
-      return;
-    }
-    sessionStorage.removeItem(SWITCHED_TOKEN_KEY);
     if (value) localStorage.setItem(TOKEN_KEY, value);
     else localStorage.removeItem(TOKEN_KEY);
   } catch {
@@ -35,24 +31,23 @@ export function setToken(value: string | null) {
   }
 }
 
-const STAFF_TOKEN_KEY = "staffToken";
+// After a Firmli staff switch the browser's session (its cookie, every tab) is the client user's, and
+// the API does not say so: the staff member's name is kept here for Back to Firmli.
+const SWITCHED_KEY = "switchedFrom";
 
-/**
- * Firmli staff who switched into a client's user keep their own token here (this tab only), for
- * the switch calls and Back to Firmli. null = not switched.
- */
-export function getStaffToken() {
+/** The Firmli staff member who switched into this user, or null. */
+export function getSwitchedFrom() {
   try {
-    return sessionStorage.getItem(STAFF_TOKEN_KEY);
+    return localStorage.getItem(SWITCHED_KEY);
   } catch {
     return null;
   }
 }
 
-export function setStaffToken(value: string | null) {
+export function setSwitchedFrom(staffName: string | null) {
   try {
-    if (value) sessionStorage.setItem(STAFF_TOKEN_KEY, value);
-    else sessionStorage.removeItem(STAFF_TOKEN_KEY);
+    if (staffName) localStorage.setItem(SWITCHED_KEY, staffName);
+    else localStorage.removeItem(SWITCHED_KEY);
   } catch {
     // Storage unavailable: Back to Firmli then means logging in again.
   }
@@ -73,9 +68,10 @@ export function clearSessionData() {
 // company picker shown after login goes here: on switch, get a new token for the chosen
 // company, then call clearSessionData() before loading any of its data.
 
+// logout: this device; logout_all: every device.
 // inactive: the user's status is no longer active (blocked, banned, ...); the API's message goes along.
 // tenant_blocked: Firmli blocked the whole institution.
-export type TSignOutReason = "logout" | "expired" | "inactive" | "tenant_blocked";
+export type TSignOutReason = "logout" | "logout_all" | "expired" | "inactive" | "tenant_blocked";
 
 let signingOut = false;
 
@@ -97,7 +93,7 @@ export function takeSignOutMessage() {
 /** Drops the token and all client data, then opens the login page (lib/auth.ts logOut() calls the API first). */
 export function signOut(reason: TSignOutReason, message?: string) {
   setToken(null);
-  setStaffToken(null); // logging out ends a staff switch too
+  setSwitchedFrom(null); // logging out ends a staff switch too
   clearSessionData();
 
   if (signingOut || window.location.pathname === RO_LOGIN) return;

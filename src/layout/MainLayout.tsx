@@ -191,7 +191,12 @@ export default function MainLayout() {
               </Menu.Dropdown>
             </Menu>
             {canSwitch(user) && (
-              <StaffSwitcher opened={switcherOpened} onClose={switcher.close} currentUserId={user?.id} />
+              <StaffSwitcher
+                opened={switcherOpened}
+                onClose={switcher.close}
+                currentUserId={user?.id}
+                staffName={user?.name}
+              />
             )}
           </Group>
         </Group>

@@ -12,7 +12,8 @@ import { RO_FORGOT_PASSWORD } from "../routes";
 // Shown after signOut() sends the user here.
 const reasonNotices = {
   expired: { color: "orange", text: "Your session has expired. Please log in again." },
-  logout: { color: "green", text: "You've been logged out on all your devices." },
+  logout: { color: "green", text: "You've been logged out." },
+  logout_all: { color: "green", text: "You've been logged out on all your devices." },
   tenant_blocked: { color: "red", text: "Your institution's account is blocked; contact Firmli." },
 };
 
